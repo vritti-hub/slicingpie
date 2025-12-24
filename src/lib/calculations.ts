@@ -42,23 +42,23 @@ export function calculateFounderSlices(
   
   // Get category multipliers
   const cashMultiplier = categories.find(c => c.id === 'cash')?.multiplier ?? 4;
-  const salaryMultiplier = categories.find(c => c.id === 'salary')?.multiplier ?? 2;
   const timeMultiplier = categories.find(c => c.id === 'time')?.multiplier ?? 2;
   const revenueCategory = categories.find(c => c.id === 'revenue');
   const revenueMultiplier = revenueCategory?.multiplier ?? 8;
   const revenueCommission = (revenueCategory?.commissionPercent ?? 10) / 100;
   const expensesMultiplier = categories.find(c => c.id === 'expenses')?.multiplier ?? 4;
   
-  // Calculate slices
+  // Calculate slices - Time now includes salary gap (hourlyGap × hours × multiplier)
+  const timeSlices = salaryGapValue * timeMultiplier;
+  
   const slices = {
     cash: netCash * cashMultiplier,
-    salary: salaryGapValue * salaryMultiplier,
-    time: hoursWorked * timeMultiplier,
+    time: timeSlices,
     revenue: revenueTotal * revenueCommission * revenueMultiplier,
     expenses: expensesTotal * expensesMultiplier,
     total: 0,
   };
-  slices.total = slices.cash + slices.salary + slices.time + slices.revenue + slices.expenses;
+  slices.total = slices.cash + slices.time + slices.revenue + slices.expenses;
   
   return {
     founderId: founder.id,
