@@ -1,7 +1,48 @@
+import { useState, useEffect, useRef } from 'react';
 import { Category, CategoryId } from '@/types/slicingPie';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { CategoryBadge } from '@/components/CategoryBadge';
+
+interface DebouncedInputProps {
+  value: string | number;
+  onChange: (value: string) => void;
+  type?: string;
+  debounceMs?: number;
+  [key: string]: any;
+}
+
+function DebouncedInput({ value, onChange, type = 'text', debounceMs = 500, ...props }: DebouncedInputProps) {
+  const [localValue, setLocalValue] = useState(String(value));
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    setLocalValue(String(value));
+  }, [value]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setLocalValue(newValue);
+
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      onChange(newValue);
+    }, debounceMs);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
+  return <Input type={type} value={localValue} onChange={handleChange} {...props} />;
+}
 
 interface CategorySettingsProps {
   categories: Category[];
@@ -30,13 +71,13 @@ export function CategorySettings({ categories, onUpdateCategory, disabled = fals
               <div className="space-y-2">
                 <Label htmlFor={`multiplier-${category.id}`}>Multiplier</Label>
                 <div className="flex items-center gap-2">
-                  <Input
+                  <DebouncedInput
                     id={`multiplier-${category.id}`}
                     type="number"
                     min="0"
                     step="0.5"
                     value={category.multiplier}
-                    onChange={(e) => onUpdateCategory(category.id, { multiplier: parseFloat(e.target.value) || 0 })}
+                    onChange={(value) => onUpdateCategory(category.id, { multiplier: parseFloat(value) || 0 })}
                     className="input-financial w-20"
                     disabled={disabled}
                   />
@@ -48,14 +89,14 @@ export function CategorySettings({ categories, onUpdateCategory, disabled = fals
                 <div className="space-y-2">
                   <Label htmlFor={`commission-${category.id}`}>Commission</Label>
                   <div className="flex items-center gap-2">
-                    <Input
+                    <DebouncedInput
                       id={`commission-${category.id}`}
                       type="number"
                       min="0"
                       max="100"
                       step="1"
                       value={category.commissionPercent}
-                      onChange={(e) => onUpdateCategory(category.id, { commissionPercent: parseFloat(e.target.value) || 0 })}
+                      onChange={(value) => onUpdateCategory(category.id, { commissionPercent: parseFloat(value) || 0 })}
                       className="input-financial w-20"
                       disabled={disabled}
                     />
