@@ -1,12 +1,64 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from 'react';
+import { TabId } from '@/types/slicingPie';
+import { useSlicingPie } from '@/hooks/useSlicingPie';
+import { Navigation } from '@/components/Navigation';
+import { OverviewTab } from '@/components/overview/OverviewTab';
+import { LedgerTab } from '@/components/ledger/LedgerTab';
+import { SettingsTab } from '@/components/settings/SettingsTab';
 
 const Index = () => {
+  const [activeTab, setActiveTab] = useState<TabId>('overview');
+  
+  const {
+    founders,
+    categories,
+    entries,
+    founderCalculations,
+    totals,
+    inputCategories,
+    addFounder,
+    updateFounder,
+    removeFounder,
+    updateCategory,
+    addEntry,
+    removeEntry,
+  } = useSlicingPie();
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-background">
+      <Navigation activeTab={activeTab} onTabChange={setActiveTab} />
+      
+      <main className="container mx-auto px-4 py-8">
+        {activeTab === 'overview' && (
+          <OverviewTab
+            founders={founders}
+            categories={categories}
+            founderCalculations={founderCalculations}
+            totals={totals}
+          />
+        )}
+        
+        {activeTab === 'ledger' && (
+          <LedgerTab
+            founders={founders}
+            categories={inputCategories}
+            entries={entries}
+            onAddEntry={addEntry}
+            onRemoveEntry={removeEntry}
+          />
+        )}
+        
+        {activeTab === 'settings' && (
+          <SettingsTab
+            founders={founders}
+            categories={categories}
+            onAddFounder={addFounder}
+            onUpdateFounder={updateFounder}
+            onRemoveFounder={removeFounder}
+            onUpdateCategory={updateCategory}
+          />
+        )}
+      </main>
     </div>
   );
 };
