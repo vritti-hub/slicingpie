@@ -21,17 +21,10 @@ export function FounderCard({ founder, calculations, categories, totalSlices }: 
       slices: calculations.slices.cash,
     },
     {
-      category: categories.find(c => c.id === 'salary')!,
-      input: formatCurrency(calculations.salaryGapValue),
-      multiplier: `${categories.find(c => c.id === 'salary')?.multiplier}×`,
-      formula: `₹${formatNumber(calculations.hourlyGap, 2)}/hr × ${formatNumber(calculations.hoursWorked)} hrs × ${categories.find(c => c.id === 'salary')?.multiplier}`,
-      slices: calculations.slices.salary,
-    },
-    {
       category: categories.find(c => c.id === 'time')!,
       input: `${formatNumber(calculations.hoursWorked)} hrs`,
       multiplier: `${categories.find(c => c.id === 'time')?.multiplier}×`,
-      formula: `${formatNumber(calculations.hoursWorked)} hrs × ${categories.find(c => c.id === 'time')?.multiplier}`,
+      formula: `₹${formatNumber(calculations.hourlyGap, 2)}/hr × ${formatNumber(calculations.hoursWorked)} hrs × ${categories.find(c => c.id === 'time')?.multiplier}`,
       slices: calculations.slices.time,
     },
     {
@@ -52,7 +45,6 @@ export function FounderCard({ founder, calculations, categories, totalSlices }: 
 
   const colorClasses: Record<string, string> = {
     blue: 'bg-blue-500',
-    green: 'bg-green-500',
     orange: 'bg-orange-500',
     red: 'bg-red-500',
     pink: 'bg-pink-500',

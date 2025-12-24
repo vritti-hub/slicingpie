@@ -22,15 +22,6 @@ export const DEFAULT_CATEGORIES: Category[] = [
     emoji: '💙',
   },
   {
-    id: 'salary',
-    name: 'Salary Gap',
-    multiplier: 2,
-    inputType: 'currency',
-    isAutoCalculated: true,
-    color: 'green',
-    emoji: '💚',
-  },
-  {
     id: 'time',
     name: 'Time Contributed',
     multiplier: 2,
