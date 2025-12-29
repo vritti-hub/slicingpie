@@ -48,4 +48,13 @@ export const DEFAULT_CATEGORIES: Category[] = [
     color: 'pink',
     emoji: '💗',
   },
+  {
+    id: 'expense_received',
+    name: 'Expense Received',
+    multiplier: 4,
+    inputType: 'currency',
+    isAutoCalculated: false,
+    color: 'purple',
+    emoji: '💜',
+  },
 ];

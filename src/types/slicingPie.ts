@@ -5,7 +5,7 @@ export interface Founder {
   paidSalary: number; // Monthly in ₹
 }
 
-export type CategoryId = 'cash' | 'time' | 'revenue' | 'expenses';
+export type CategoryId = 'cash' | 'time' | 'revenue' | 'expenses' | 'expense_received';
 
 export interface Category {
   id: CategoryId;
@@ -54,11 +54,13 @@ export interface FounderCalculations {
   salaryGapValue: number;
   revenueTotal: number;
   expensesTotal: number;
+  expenseReceivedTotal: number;
   slices: {
     cash: number;
     time: number;
     revenue: number;
     expenses: number;
+    expenseReceived: number;
     total: number;
   };
 }

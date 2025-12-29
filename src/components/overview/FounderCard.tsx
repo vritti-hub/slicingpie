@@ -41,6 +41,13 @@ export function FounderCard({ founder, calculations, categories, totalSlices }: 
       formula: `${formatCurrency(calculations.expensesTotal)} × ${categories.find(c => c.id === 'expenses')?.multiplier}`,
       slices: calculations.slices.expenses,
     },
+    {
+      category: categories.find(c => c.id === 'expense_received')!,
+      input: formatCurrency(calculations.expenseReceivedTotal),
+      multiplier: `${categories.find(c => c.id === 'expense_received')?.multiplier}×`,
+      formula: `${formatCurrency(calculations.expenseReceivedTotal)} × ${categories.find(c => c.id === 'expense_received')?.multiplier}`,
+      slices: -calculations.slices.expenseReceived,  // Show as negative
+    },
   ];
 
   const colorClasses: Record<string, string> = {
@@ -48,6 +55,7 @@ export function FounderCard({ founder, calculations, categories, totalSlices }: 
     orange: 'bg-orange-500',
     red: 'bg-red-500',
     pink: 'bg-pink-500',
+    purple: 'bg-purple-500',
   };
 
   return (

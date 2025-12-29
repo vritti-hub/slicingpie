@@ -61,15 +61,25 @@ export function calculateFounderSlices(
     const multiplier = e.categorySnapshot.multiplier;
     return sum + e.amount * multiplier;
   }, 0);
-  
+
+  // Expense Received slices - SUBTRACTS from pie (reimbursements)
+  const expenseReceivedEntries = founderEntries.filter(e => e.categoryId === 'expense_received');
+  const expenseReceivedTotal = expenseReceivedEntries.reduce((sum, e) => sum + e.amount, 0);
+  const expenseReceivedSlices = expenseReceivedEntries.reduce((sum, e) => {
+    const multiplier = e.categorySnapshot.multiplier;
+    return sum + e.amount * multiplier;
+  }, 0);
+
   const slices = {
     cash: cashSlices,
     time: timeSlices,
     revenue: revenueSlices,
     expenses: expensesSlices,
+    expenseReceived: expenseReceivedSlices,
     total: 0,
   };
-  slices.total = slices.cash + slices.time + slices.revenue + slices.expenses;
+  // SUBTRACT expenseReceived from total (reimbursements reduce pie ownership)
+  slices.total = slices.cash + slices.time + slices.revenue + slices.expenses - slices.expenseReceived;
   
   return {
     founderId: founder.id,
@@ -83,6 +93,7 @@ export function calculateFounderSlices(
     salaryGapValue,
     revenueTotal,
     expensesTotal,
+    expenseReceivedTotal,
     slices,
   };
 }
